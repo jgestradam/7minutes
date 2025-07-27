@@ -96,9 +96,9 @@ export default function App() {
 
   return (
     <View style={styles.container}>
-      <StreakDisplay streak={streak} />
+      <StreakDisplay streak={streak} texts={t} />
       <TouchableOpacity style={styles.settingsButton} onPress={openSettings}>
-        <Text style={styles.settingsButtonText}>⚙️ {t.settings}</Text>
+        <Text style={styles.settingsButtonText}>⚙️</Text>
       </TouchableOpacity>
       
       {renderCurrentScreen()}

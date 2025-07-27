@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getStreak, getLastCompleted, setStreak, setLastCompleted, calculateNewStreak } from '../utils/storage';
+import { getStreak, getLastCompleted, setStreak, setLastCompleted, calculateNewStreak, checkStreakExpiry } from '../utils/storage';
 
 export function useStreak() {
   const [streak, setStreakState] = useState(0);
@@ -10,7 +10,16 @@ export function useStreak() {
     (async () => {
       const streakValue = await getStreak();
       const lastValue = await getLastCompleted();
-      setStreakState(streakValue);
+      
+      // Verificar si se perdió la racha
+      const actualStreak = checkStreakExpiry(streakValue, lastValue);
+      
+      // Si la racha cambió (se perdió), actualizar storage
+      if (actualStreak !== streakValue) {
+        await setStreak(actualStreak);
+      }
+      
+      setStreakState(actualStreak);
       setLastCompletedState(lastValue);
     })();
   }, []);
